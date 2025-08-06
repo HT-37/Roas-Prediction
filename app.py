@@ -66,7 +66,7 @@ if uploaded_file:
                     y_pred = model.predict(X)
 
                     mae = mean_absolute_error(y_true, y_pred)
-                    rmse = mean_squared_error(y_true, y_pred, squared=False)
+                    rmse = mean_squared_error(y_true, y_pred)
                     r2 = r2_score(y_true, y_pred)
 
                     df[f"Predicted {col}"] = y_pred
