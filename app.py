@@ -52,7 +52,7 @@ if uploaded_file:
         # Predict
         predictions = model.predict(df.drop(columns=['Cohort Day','Media Source']))
         predictions_2 = model_2.predict(df.drop(columns = ['Cohort Day','Media Source']))
-        prediction_3 = model_3.predict(df.drop(columns = ['Cohort Day','Media Source']))
+        predictions_3 = model_3.predict(df.drop(columns = ['Cohort Day','Media Source']))
         df["Predicted ROAS D15"] = predictions_3
         df["Predicted ROAS D30"] = predictions
         df["Predicted ROAS D60"] = predictions_2
