@@ -13,12 +13,12 @@ def load_model_2():
 model = load_model()
 model_2 = load_model_2()
 # === App Title ===
-st.title("📊 ROAS D30 Prediction App")
+st.title("📊 ROAS Prediction App")
 
 st.markdown("""
 Upload a CSV file with your UA campaign performance data (D0–D3) and get ROAS D30 predictions.
 **Required Columns:**  
-`Users`, `Average eCPI`, `roas - Rate - day 0`, `roas - Rate - day 1`, `roas - Rate - day 2`, `roas - Rate - day 3`,  
+`Media Source`,`Users`, `Average eCPI`, `roas - Rate - day 0`, `roas - Rate - day 1`, `roas - Rate - day 2`, `roas - Rate - day 3`,  
 `sessions - Unique users - day 1`, `sessions - Unique users - day 2`, `sessions - Unique users - day 3`
 """)
 
@@ -31,8 +31,8 @@ if uploaded_file:
         st.write("📋 Input Data Preview", df.head())
 
         # Predict
-        predictions = model.predict(df)
-        predictions_2 = model_2.predict(df)
+        predictions = model.predict(df.drop(columns='Media Source'))
+        predictions_2 = model_2.predict(df.drop(columns = 'Media Source'))
         df["Predicted ROAS D30"] = predictions
         df["Predicted ROAS D60"] = predictions_2
 
