@@ -64,11 +64,11 @@ if uploaded_file:
                     X = df[feature_cols]
                     y_true = df[col]
                     if col == 'roas - Rate - day 15':
-                        y_pred = model_3.predict(X)
+                        y_pred = model_15.predict(X)
                     elif col == 'roas - Rate - day 30': 
                         y_pred = model.predict(X)
                     elif col == 'roas - Rate - day 60':
-                        y_pred = model_2.predict(X)
+                        y_pred = model_60.predict(X)
 
                     mae = mean_absolute_error(y_true, y_pred)
 
