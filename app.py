@@ -63,18 +63,19 @@ if uploaded_file:
                 elif col in df.columns:
                     X = df[feature_cols]
                     y_true = df[col]
-                    y_pred = model.predict(X)
+                    If col = 'roas - Rate - day 15':
+                        y_pred = model_3.predict(X)
+                    elif col = 'roas - Rate - day 30': 
+                        y_pred = model.predict(X)
+                    elif col = 'roas - Rate - day 60':
+                        y_pred = model_2.predict(X)
 
                     mae = mean_absolute_error(y_true, y_pred)
-                    rmse = mean_squared_error(y_true, y_pred)
-                    r2 = r2_score(y_true, y_pred)
 
                     df[f"Predicted {col}"] = y_pred
 
                     st.write(f"📈 Model Evaluation for {col}")
                     st.write(f"**MAE:** {mae:.2f}")
-                    st.write(f"**RMSE:** {rmse:.2f}")
-                    st.write(f"**R² Score:** {r2:.2f}")
                     st.dataframe(df)
 
         elif mode == "🔮 Predict ROAS":
