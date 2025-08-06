@@ -17,7 +17,7 @@ model_2 = load_model_2()
 st.title("📊 ROAS Prediction App")
 
 st.markdown("""
-Hello, Welcome to ROAS Prediction model!
+Hello, Welcome to ROAS Prediction model! \n
 Upload a CSV file with your UA campaign performance data (D0–D3) and get ROAS D15, D30, D60 predictions.
 **Required Columns:**  
 `Cohort Day`,`Media Source`,`Users`, `Average eCPI`, `roas - Rate - day 0`, `roas - Rate - day 1`, `roas - Rate - day 2`, `roas - Rate - day 3`,  
