@@ -3,10 +3,11 @@ import pandas as pd
 import joblib
 
 # === Load Model ===
-@st.cache(allow_output_mutation=True)
+@st.cache_data()
 def load_model():
     return joblib.load("ROAS_D30.pkl")
 
+@st.cache_data()
 def load_model_2():
     return joblib.load("ROAS_D60.pkl")
 
