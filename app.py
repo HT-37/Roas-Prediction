@@ -58,9 +58,7 @@ if uploaded_file:
 
         if mode == "🧪 Test Model Accuracy":
             for col in ['roas - Rate - day 15', 'roas - Rate - day 30', 'roas - Rate - day 60']:
-                if (col == 'roas - Rate - day 15') and (col not in df.columns):
-                    st.error("❌ 'roas - Rate - day 15' column is missing. Please add it for evaluation.")
-                elif col in df.columns:
+                if col in df.columns:
                     X = df[feature_cols]
                     y_true = df[col]
                     if col == 'roas - Rate - day 15':
