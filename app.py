@@ -11,8 +11,23 @@ def load_model():
 def load_model_2():
     return joblib.load("ROAS_D60.pkl")
 
+@st.cache_data()
+def load_model_3():
+    return joblib.load("ROAS_D15.pkl")
+
+@st.cache_data()
+def preprocess(df):
+    #drop null
+    df.replace(0, np.nan, inplace=True)
+    df.dropna(inplace = True)
+
+    #drop low installs
+    df = df[df['Users']>=50]
+    return df
+
 model = load_model()
 model_2 = load_model_2()
+model_3 = load_model_3()
 # === App Title ===
 st.title("📊 ROAS Prediction App")
 
@@ -30,6 +45,7 @@ uploaded_file = st.file_uploader("📂 Upload your CSV file", type=["csv"])
 if uploaded_file:
     try:
         df = pd.read_csv(uploaded_file)
+        df = preprocess(df)
         st.write("📋 Input Data Preview", df.head())
 
         # Predict
