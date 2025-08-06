@@ -61,7 +61,7 @@ if uploaded_file:
                 if (col == 'roas - Rate - day 15') and (col not in df.columns):
                     st.error("❌ 'roas - Rate - day 15' column is missing. Please add it for evaluation.")
                 elif col in df.columns:
-                    X = df.drop(columns = feature_cols)
+                    X = df[feature_cols]
                     y_true = df[col]
                     y_pred = model.predict(X)
 
