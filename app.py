@@ -63,7 +63,7 @@ if uploaded_file:
                 elif col in df.columns:
                     X = df[feature_cols]
                     y_true = df[col]
-                    If col == 'roas - Rate - day 15':
+                    if col == 'roas - Rate - day 15':
                         y_pred = model_3.predict(X)
                     elif col == 'roas - Rate - day 30': 
                         y_pred = model.predict(X)
