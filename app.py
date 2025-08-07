@@ -40,7 +40,7 @@ Welcome! You can either:
 """)
 
 # === Mode Selection ===
-mode = st.radio("Select mode:", ["🧪 Test Model Accuracy", "🔮 Predict ROAS"])
+mode = st.radio("**Select mode:**", ["🧪 Test Model Accuracy", "🔮 Predict ROAS"])
 
 # === File Upload ===
 uploaded_file = st.file_uploader("📂 Upload your CSV file", type=["csv"])
