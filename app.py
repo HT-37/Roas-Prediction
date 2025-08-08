@@ -71,6 +71,7 @@ if uploaded_file:
                     mae = mean_absolute_error(y_true, y_pred)
 
                     df[f"Predicted {col}"] = y_pred
+                    df[f"Predicted gap {col}"] = abs(df[col]-y_pred)
 
                     st.write(f"📈 Model Evaluation for {col}")
                     st.write(f"**MAE:** {mae:.2f}")
