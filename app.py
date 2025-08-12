@@ -2,93 +2,131 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error
 
-# === Load Models ===
-@st.cache_data()
-def load_model():
-    return joblib.load("ROAS_D30.pkl")
+# === Cached Helpers ===
+@st.cache_data
+def load_model(path):
+    return joblib.load(path)
 
-@st.cache_data()
-def load_model_2():
-    return joblib.load("ROAS_D60.pkl")
-
-@st.cache_data()
-def load_model_3():
-    return joblib.load("ROAS_D15.pkl")
-
-@st.cache_data()
+@st.cache_data
 def preprocess(df):
     df.replace(0, np.nan, inplace=True)
     df.dropna(inplace=True)
-    df = df[df['Users'] >= 50]
-    return df
+    return df[df['Users'] >= 50]
+
+# === Model Paths ===
+MODEL_PATHS = {
+    # ROAS direct
+    "D3_D7": "models/ROAS_D7_1208.pkl",
+    "D3_D15": "models/ROAS_D15_1208.pkl",
+    "D3_D30": "models/ROAS_D30_1208.pkl",
+    "D3_D60": "models/ROAS_D60_1208.pkl",
+    # ROAS from another day
+    "D7_D15": "models/ROAS_D7_D15_1208.pkl",
+    "D7_D30": "models/ROAS_D7_D30_1208.pkl",
+    "D7_D60": "models/ROAS_D7_D60_1208.pkl",
+    "D15_D30": "models/ROAS_D15_D30_1208.pkl",
+    "D15_D60": "models/ROAS_D15_D60_1208.pkl",
+    "D30_D60": "models/ROAS_D30_D60_1208.pkl",
+    # Day of return cost
+    "DOR_D7": "models/DOR_D7.pkl",
+    "DOR_D15": "models/DOR_D15.pkl",
+    "DOR_D30": "models/DOR_D30.pkl"
+}
 
 # === App Header ===
-st.title("📊 ROAS Prediction App")
+st.title("📊 ROAS & Break-Even Day Prediction App")
 
 st.markdown("""
-Welcome! You can either:  
-1️⃣ **Test the model performance** using a dataset that includes actual target ROAS, or  
-2️⃣ **Predict ROAS** for a new campaign with D0–D3 data.  
+Upload your campaign data with ROAS up to the latest day you have,  
+and we’ll predict future ROAS + Break-even Day.
 
 **Required Columns:**  
-`Cohort Day`, `Media Source`, `Users`, `Average eCPI`, `roas - Rate - day 0`, `roas - Rate - day 1`,  
-`roas - Rate - day 2`, `roas - Rate - day 3`, `sessions - Unique users - day 1`,  
-`sessions - Unique users - day 2`, `sessions - Unique users - day 3`  
-*(+ `roas - Rate - day 15`, `roas - Rate - day 30`, `roas - Rate - day 60` if testing accuracy)*
+- `Cohort Day`, `Media Source`, `Users`, `Average eCPI`,  
+- `roas - Rate - day 0`, `roas - Rate - day 1`, `roas - Rate - day 2`, `roas - Rate - day 3`,
+- `sessions - Unique users - day 1`, `sessions - Unique users - day 2`, `sessions - Unique users - day 3`,
+- *Optional*: `roas - Rate - day 7`, `roas - Rate - day 15`, `roas - Rate - day 30`  
 """)
 
-# === Mode Selection ===
-mode = st.radio("**Select mode:**", ["🧪 Test Model Accuracy", "🔮 Predict ROAS"])
-
 # === File Upload ===
-uploaded_file = st.file_uploader("📂 Upload your CSV file", type=["csv"])
+uploaded_file = st.file_uploader("📂 Upload CSV file", type=["csv"])
 
 if uploaded_file:
     try:
+        # Load and preprocess
         df = pd.read_csv(uploaded_file)
         df = preprocess(df)
         st.write("📋 Data Preview", df.head())
 
-        model = load_model()
-        model_15 = load_model_3()
-        model_60 = load_model_2()
-        feature_cols = [col for col in df.columns if col not in ['Cohort Day', 'Media Source', 'roas - Rate - day 15', 'roas - Rate - day 30', 'roas - Rate - day 60']]
+        # Load all models at once
+        models = {key: load_model(path) for key, path in MODEL_PATHS.items()}
 
-        if mode == "🧪 Test Model Accuracy":
-            for col in ['roas - Rate - day 15', 'roas - Rate - day 30', 'roas - Rate - day 60']:
-                if col in df.columns:
-                    X = df[feature_cols]
-                    y_true = df[col]
-                    if col == 'roas - Rate - day 15':
-                        y_pred = model_15.predict(X)
-                    elif col == 'roas - Rate - day 30': 
-                        y_pred = model.predict(X)
-                    elif col == 'roas - Rate - day 60':
-                        y_pred = model_60.predict(X)
+        # Identify last ROAS day available
+        roas_days = [3, 7, 15, 30, 60]
+        available_days = [d for d in roas_days if f"roas - Rate - day {d}" in df.columns]
+    
+        last_day = max(available_days)
+        st.info(f"📅 Last ROAS day available: **Day {last_day}**")
 
-                    mae = mean_absolute_error(y_true, y_pred)
+        # Determine which future ROAS to predict
+        prediction_targets = [d for d in roas_days if d > last_day]
+        st.write(f"🔮 Will predict ROAS for days: {prediction_targets}")
 
-                    df[f"Predicted {col}"] = y_pred
-                    df[f"Predicted gap {col}"] = y_pred - df[col]
+        # Feature columns (exclude actual future ROAS columns)
+        excluded_cols = ['Cohort Day', 'Media Source'] + [f'roas - Rate - day {d}' for d in roas_days if d > last_day]
+        feature_cols = [col for col in df.columns if col not in excluded_cols]
 
-                    st.write(f"📈 Model Evaluation for {col}")
-                    st.write(f"**MAE:** {mae:.2f}")
-                    st.dataframe(df)
+        # Predict ROAS future days
+        for target_day in prediction_targets:
+            model_key = f"D{last_day}_D{target_day}"
+            if model_key in models:
+                df[f"Predicted ROAS day {target_day}"] = models[model_key].predict(df[feature_cols])
+            else:
+                st.warning(f"No model found for {model_key}")
 
-        elif mode == "🔮 Predict ROAS":
-            X = df[feature_cols]
-            df["Predicted ROAS D15"] = model_15.predict(X)
-            df["Predicted ROAS D30"] = model.predict(X)
-            df["Predicted ROAS D60"] = model_60.predict(X)
+        # Predict Day of Return
+        if last_day < 7:
+            st.warning("Not enough data: last available ROAS day < 7. Skipping prediction.")
+        else:
+            dor_model_key = f"DOR_D{last_day}"
+            #feature_cols.append('Media Source')
+            if dor_model_key in models:
+                df["Predicted Break-even Day"] = np.ceil(models[dor_model_key].predict(df[feature_cols]))
+            else:
+                st.warning(f"No found model for Day {last_day}")
 
-            st.write("✅ ROAS Predictions")
-            st.dataframe(df)
+        # === Summary ===
+        start_date = df['Cohort Day'].min()
+        end_date = df['Cohort Day'].max()
+
+        st.subheader("📜 Prediction Summary")
+        st.write(f"Your input range: **{start_date} → {end_date}**")
+        st.write(f"Last ROAS available: **Day {last_day}**")
+
+        # Aggregated prediction ROAS
+        for target_day in prediction_targets:
+            pred_col = f"Predicted ROAS day {target_day}"
+            if pred_col in df.columns:
+                agg_roas = (df[pred_col] * df['Average eCPI'] * df['Users']).sum() / 100 / (df['Average eCPI'] * df['Users']).sum()
+                st.write(f"Predicted ROAS day {target_day}: **{agg_roas*100:.4f}**")
+
+        # Aggregated DOR
+        if "Predicted Break-even Day" in df.columns:
+            max_dor = df["Predicted Break-even Day"].max()
+            st.write(f"Predicted Break-even day: **{max_dor:.0f}**")
+
+        # Predictions Diplay
+        st.write(" **Predictions Preview**", df.head())
 
         # === Download Button ===
         csv = df.to_csv(index=False)
-        st.download_button("⬇️ Download Result CSV", csv, "roas_predictions.csv", "text/csv")
+        st.download_button(
+            "⬇️ Download Result CSV",
+            csv,
+            "roas_predictions.csv",
+            "text/csv"
+        )
 
     except Exception as e:
         st.error(f"❌ Error: {e}")
