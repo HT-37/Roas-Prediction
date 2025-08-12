@@ -117,7 +117,7 @@ if uploaded_file:
             st.write(f"Predicted Break-even day: **{max_dor:.0f}**")
 
         # Predictions Diplay
-        st.write(" **Predictions Preview**", df.head())
+        st.write(" **Predictions Preview**", df)
 
         # === Download Button ===
         csv = df.to_csv(index=False)
