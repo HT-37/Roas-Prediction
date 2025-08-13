@@ -6,6 +6,7 @@ import base64
 import os
 from sklearn.metrics import mean_absolute_error
 
+
 def img_to_base64(img_path):
     with open(img_path, "rb") as img_file:
         b64_str = base64.b64encode(img_file.read()).decode()
@@ -78,7 +79,7 @@ def set_background():
             </div>
         </div>
     </div>
-    ""
+    """
     st.markdown(background_code, unsafe_allow_html=True)
 
 # === Call background function ===
