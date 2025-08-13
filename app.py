@@ -2,7 +2,87 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import base64
+import os
 from sklearn.metrics import mean_absolute_error
+
+def img_to_base64(img_path):
+    with open(img_path, "rb") as img_file:
+        b64_str = base64.b64encode(img_file.read()).decode()
+    ext = os.path.splitext(img_path)[1][1:]  # get extension without dot
+    mime = f"image/{'jpeg' if ext=='jpg' else ext}"  # jpg -> jpeg for mime
+    return f"data:{mime};base64,{b64_str}"
+
+# === Inject background HTML & CSS ===
+def set_background():
+    leaf_01 = img_to_base64("leaf_01.png")
+    leaf_02 = img_to_base64("leaf_02.png")
+    leaf_03 = img_to_base64("leaf_03.png")
+    leaf_04 = img_to_base64("leaf_04.png")
+
+    background_code = f"""
+    <style>
+    .stApp {{
+        background: transparent !important;
+    }}
+    .leaves {{
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        pointer-events: none;
+    }}
+    .leaves .set {{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0; left: 0;
+        pointer-events: none;
+    }}
+    .leaves .set div {{ position: absolute; display: block; }}
+    .leaves .set div:nth-child(1) {{ left: 20%; animation: animate 20s linear infinite; }}
+    .leaves .set div:nth-child(2) {{ left: 50%; animation: animate 14s linear infinite; }}
+    .leaves .set div:nth-child(3) {{ left: 70%; animation: animate 12s linear infinite; }}
+    .leaves .set div:nth-child(4) {{ left: 5%;  animation: animate 15s linear infinite; }}
+    .leaves .set div:nth-child(5) {{ left: 85%; animation: animate 18s linear infinite; }}
+    .leaves .set div:nth-child(6) {{ left: 90%; animation: animate 12s linear infinite; }}
+    .leaves .set div:nth-child(7) {{ left: 15%; animation: animate 14s linear infinite; }}
+    .leaves .set div:nth-child(8) {{ left: 60%; animation: animate 15s linear infinite; }}
+
+    @keyframes animate {{
+        0% {{ opacity: 0; top: -10%; transform: translateX(5px) rotate(0deg); }}
+        10% {{ opacity: 1; }}
+        20% {{ transform: translateX(-5px) rotate(45deg); }}
+        40% {{ transform: translateX(-5px) rotate(90deg); }}
+        60% {{ transform: translateX(5px) rotate(180deg); }}
+        80% {{ transform: translateX(-5px) rotate(45deg); }}
+        100% {{ top: 110%; transform: translateX(5px) rotate(225deg); }}
+
+    </style>
+
+    <div id="custom-bg">
+        <div class="leaves">
+            <div class="set">
+                <div><img src="{leaf_01}"></div>
+                <div><img src="{leaf_02}"></div>
+                <div><img src="{leaf_03}"></div>
+                <div><img src="{leaf_04}"></div>
+                <div><img src="{leaf_01}"></div>
+                <div><img src="{leaf_02}"></div>
+                <div><img src="{leaf_03}"></div>
+                <div><img src="{leaf_04}"></div>
+            </div>
+        </div>
+    </div>
+    ""
+    st.markdown(background_code, unsafe_allow_html=True)
+
+# === Call background function ===
+set_background()
 
 # === Cached Helpers ===
 @st.cache_data
