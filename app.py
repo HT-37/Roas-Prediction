@@ -16,10 +16,10 @@ def img_to_base64(img_path):
 
 # === Inject background HTML & CSS ===
 def set_background():
-    leaf_01 = img_to_base64("leaf_01.png")
-    leaf_02 = img_to_base64("leaf_02.png")
-    leaf_03 = img_to_base64("leaf_03.png")
-    leaf_04 = img_to_base64("leaf_04.png")
+    leaf_01 = img_to_base64("images/leaf_01.png")
+    leaf_02 = img_to_base64("images/leaf_02.png")
+    leaf_03 = img_to_base64("images/leaf_03.png")
+    leaf_04 = img_to_base64("images/leaf_04.png")
 
     background_code = f"""
     <style>
