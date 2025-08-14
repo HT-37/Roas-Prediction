@@ -178,8 +178,8 @@ if uploaded_file:
                 st.warning(f"No found model for Day {last_day}")
 
         # === Summary ===
-        start_date = pd.to_date(df['Cohort Day']).min()
-        end_date = pd.to_date(df['Cohort Day']).max()
+        start_date = pd.to_datetime(df['Cohort Day']).min()
+        end_date = pd.to_datetime(df['Cohort Day']).max()
 
         st.subheader("📜 Prediction Summary")
         st.write(f"Your input range: **{start_date} → {end_date}**")
