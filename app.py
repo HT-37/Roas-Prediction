@@ -195,10 +195,15 @@ if uploaded_file:
 
         # Make sure both columns exist
         if "Cohort Day" in df.columns and "Predicted Break-even Day" in df.columns:
+            # If Cohort Day is an install date
             df["Cohort Day"] = pd.to_datetime(df["Cohort Day"], errors="coerce")
-            max_dor = (df["Cohort Day"] + pd.to_timedelta(df["Predicted Break-even Day"])).max() - df["Cohort Day"].min()
-            max_dor = int(max_dor)  # convert to integer if it's a timedelta/float
-            st.write(f"📈 Predicted Break-even day: {max_dor} days")
+            # If Predicted Break-even Day is "number of days ahead" (int/float)
+            df["Predicted Break-even Day"] = pd.to_numeric(df["Predicted Break-even Day"], errors="coerce")
+            # Now compute max DOR relative to earliest cohort
+            max_dor = (df["Cohort Day"] + pd.to_timedelta(df["Predicted Break-even Day"], unit="D")).max() - df["Cohort Day"].min()
+            max_dor = max_dor.days  # extract as integer number of days
+            st.write(f"📈 Max Day of Return (DOR): {max_dor} days")
+
 
         # Predictions Diplay
         st.write(" **Predictions Preview**", df)
