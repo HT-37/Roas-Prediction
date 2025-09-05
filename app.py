@@ -168,12 +168,13 @@ if uploaded_file:
 
         # Predict Day of Return
         if last_day < 7:
-            st.warning("Not enough data: last available ROAS day < 7. Skipping prediction.")
+            st.warning("Not enough data: last available ROAS day < 7. Skipping BED prediction.")
         else:
             dor_model_key = f"DOR_D{last_day}"
             #feature_cols.append('Media Source')
             if dor_model_key in models:
-                df["Predicted Break-even Day"] = np.ceil(models[dor_model_key].predict(df[feature_cols]))
+                df["Predicted Break-even Day"] = np.ceil(models[dor_model_key].predict(df[['Users','Average eCPI','roas - Rate - day 0','roas - Rate - day 1','roas - Rate - day 2','roas - Rate - day 3','roas - Rate - day 7','roas - Rate - day 15','roas - Rate - day 30',
+                                                                                           'sessions - Unique users - day 1','sessions - Unique users - day 2','sessions - Unique users - day 3']))
             else:
                 st.warning(f"No found model for Day {last_day}")
 
