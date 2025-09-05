@@ -196,7 +196,7 @@ if uploaded_file:
         # Make sure both columns exist
         if "Cohort Day" in df.columns and "Predicted Break-even Day" in df.columns:
             df["Cohort Day"] = pd.to_datetime(df["Cohort Day"], errors="coerce")
-            max_dor = (df["Cohort Day"] + df["Predicted Break-even Day"]).max() - df["Cohort Day"].min()
+            max_dor = (df["Cohort Day"] + pd.to_timedelta(df["Predicted Break-even Day"])).max() - df["Cohort Day"].min()
             max_dor = int(max_dor)  # convert to integer if it's a timedelta/float
             st.write(f"📈 Predicted Break-even day: {max_dor} days")
 
