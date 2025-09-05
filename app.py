@@ -202,7 +202,7 @@ if uploaded_file:
             # Now compute max DOR relative to earliest cohort
             max_dor = (df["Cohort Day"] + pd.to_timedelta(df["Predicted Break-even Day"], unit="D")).max() - df["Cohort Day"].min()
             max_dor = max_dor.days  # extract as integer number of days
-            st.write(f"📈 Max Day of Return (DOR): {max_dor} days")
+            st.write(f"Predicted Break-even Day: {max_dor} days")
 
 
         # Predictions Diplay
