@@ -193,10 +193,11 @@ if uploaded_file:
                 agg_roas = (df[pred_col] * df['Average eCPI'] * df['Users']).sum() / 100 / (df['Average eCPI'] * df['Users']).sum()
                 st.write(f"Predicted ROAS day {target_day}: **{agg_roas*100:.4f}**")
 
-        # Aggregated DOR
-        if "Predicted Break-even Day" in df.columns:
-            max_dor = df["Predicted Break-even Day"].max()
-            st.write(f"Predicted Break-even day: **{max_dor:.0f}**")
+        # Make sure both columns exist
+        if "Cohort Day" in df.columns and "Predicted Break-even Day" in df.columns:
+            max_dor = (df["Cohort Day"] + df["Predicted Break-even Day"]).max() - df["Cohort Day"].min()
+            max_dor = int(max_dor)  # convert to integer if it's a timedelta/float
+            st.write(f"📈 Predicted Break-even day: {max_dor} days")
 
         # Predictions Diplay
         st.write(" **Predictions Preview**", df)
