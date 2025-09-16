@@ -34,7 +34,7 @@ with tab1:
 
 with tab2:
     FILE_ID = "1N5MDyRjeDsKK1t6aZHGFa-LvHYADF_tC"
-    chunk_iter = load_csv(FILE_ID, "data/revenue.csv", chunksize=100000)
+    chunk_iter = load_csv(FILE_ID, "data.csv", chunksize=100000)
     filtered_rows = []
     for chunk in chunk_iter:
         filtered_rows.append(chunk[chunk["product_name"] == selected_product])
