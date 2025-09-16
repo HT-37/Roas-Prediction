@@ -4,11 +4,7 @@ import os
 
 def load_games_list(path: str) -> pd.DataFrame:
     return pd.read_csv(path)
-
-import pandas as pd
-import gdown
-import os
-
+    
 def download_from_gdrive(file_id: str, local_path: str = "data.csv") -> str:
     """
     Download file from Google Drive if not already exists.
