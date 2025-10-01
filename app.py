@@ -19,6 +19,7 @@ with st.sidebar:
 
     # Upload ROAS file
     roas_file = st.file_uploader("Upload ROAS file (CSV)", type=["csv"])
+    rentention_file = st.file_uploader("Upload Retention file (CSV)", type=["csv"])
 
 # --- Main Layout ---
 st.title("🎮 Game Revenue & ROAS Prediction")
@@ -28,9 +29,9 @@ tab1, tab2 = st.tabs(["📊 Cohort ROAS Prediction", "💰 Cash Flow Prediction"
 
 with tab1:
     if roas_file is not None:
-        roas_prediction_ui(roas_file)
+        roas_prediction_ui(roas_file, retention_file)
     else:
-        st.warning("Please upload a ROAS file to continue.")
+        st.warning("Please upload input files to continue.")
 
 with tab2:
     FILE_ID = "1N5MDyRjeDsKK1t6aZHGFa-LvHYADF_tC"
