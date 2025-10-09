@@ -71,14 +71,14 @@ def roas_prediction_ui(roas_file):
                 st.warning(f"No model found for {model_key}")
 
         # Predict Day of Return
-        #if last_day < 7:
-            #st.warning("Not enough data: last available ROAS day < 7. Skipping BED prediction.")
-        #else:
-            #dor_model_key = f"DOR_D{last_day}"
-            #if dor_model_key in models:
-                #df["Predicted Break-even Day"] = np.ceil(models[dor_model_key].predict(df[feature_cols]))
-            #else:
-                #st.warning(f"No model found for Day {last_day}")
+        if last_day < 7:
+            st.warning("Not enough data: last available ROAS day < 7. Skipping BED prediction.")
+        else:
+            dor_model_key = f"DOR_D{last_day}"
+            if dor_model_key in models:
+                df["Predicted Break-even Day"] = np.ceil(models[dor_model_key].predict(df[feature_cols]))
+            else:
+                st.warning(f"No model found for Day {last_day}")
 
         # === Summary ===
         if "Cohort Day" in df.columns:
@@ -97,12 +97,12 @@ def roas_prediction_ui(roas_file):
                 st.write(f"Predicted ROAS day {target_day}: **{agg_roas*100:.4f}%**")
 
         # Compute max DOR relative to earliest cohort
-        #if "Cohort Day" in df.columns and "Predicted Break-even Day" in df.columns:
-            #df["Cohort Day"] = pd.to_datetime(df["Cohort Day"], errors="coerce")
-            #df["Predicted Break-even Day"] = pd.to_numeric(df["Predicted Break-even Day"], errors="coerce")
-            #max_dor = (df["Cohort Day"] + pd.to_timedelta(df["Predicted Break-even Day"], unit="D")).max() - df["Cohort Day"].min()
-            #max_dor = max_dor.days
-            #st.write(f"Predicted Break-even Day (max): **{max_dor} days**")
+        if "Cohort Day" in df.columns and "Predicted Break-even Day" in df.columns:
+            df["Cohort Day"] = pd.to_datetime(df["Cohort Day"], errors="coerce")
+            df["Predicted Break-even Day"] = pd.to_numeric(df["Predicted Break-even Day"], errors="coerce")
+            max_dor = (df["Cohort Day"] + pd.to_timedelta(df["Predicted Break-even Day"], unit="D")).max() - df["Cohort Day"].min()
+            max_dor = max_dor.days
+            st.write(f"Predicted Break-even Day (max): **{max_dor} days**")
 
         # Predictions Display
         st.write(" **Predictions Preview**", df)
