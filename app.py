@@ -33,13 +33,13 @@ with tab1:
     else:
         st.warning("Please upload input files to continue.")
 
-with tab2:
-    FILE_ID = "1N5MDyRjeDsKK1t6aZHGFa-LvHYADF_tC"
-    chunk_iter = load_csv(FILE_ID, "data.csv", chunksize=100000)
-    filtered_rows = []
-    for chunk in chunk_iter:
-        filtered_rows.append(chunk[chunk["product_name"] == selected_product])
+#with tab2:
+    #FILE_ID = "1N5MDyRjeDsKK1t6aZHGFa-LvHYADF_tC"
+    #chunk_iter = load_csv(FILE_ID, "data.csv", chunksize=100000)
+    #filtered_rows = []
+    #for chunk in chunk_iter:
+        #filtered_rows.append(chunk[chunk["product_name"] == selected_product])
     # Combine all filtered chunks
-    filtered_df = pd.concat(filtered_rows, ignore_index=True)
+    #filtered_df = pd.concat(filtered_rows, ignore_index=True)
     
-    revenue_prediction_ui(filtered_df, game_name)
+    #revenue_prediction_ui(filtered_df, game_name)
