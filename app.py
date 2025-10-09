@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from data_loader import load_games_list, load_csv
+#from data_loader import load_games_list, load_csv
 from roas_model import roas_prediction_ui
 from revenue_model import revenue_prediction_ui
 
@@ -14,8 +14,8 @@ with st.sidebar:
     show_notes = st.checkbox("Show Developer Notes", value=False)
 
     # Select Game
-    games_df = load_games_list("data/games_list.csv")
-    game_name = st.selectbox("Choose Game:", games_df["game_name"].unique())
+    #games_df = load_games_list("data/games_list.csv")
+    #game_name = st.selectbox("Choose Game:", games_df["game_name"].unique())
 
     # Upload ROAS file
     roas_file = st.file_uploader("Upload ROAS file (CSV)", type=["csv"])
@@ -43,13 +43,3 @@ with tab2:
     filtered_df = pd.concat(filtered_rows, ignore_index=True)
     
     revenue_prediction_ui(filtered_df, game_name)
-
-# --- Developer Notes ---
-if show_notes:
-    st.markdown("---")
-    st.subheader("📝 Developer Notes")
-    st.write("""
-    - **ROAS Prediction**: Based on your uploaded file.
-    - **Revenue Prediction**: Uses Prophet model on historical game revenue.
-    - Cumulative revenue vs cost is simulated with user input planned cost.
-    """)
