@@ -1,5 +1,5 @@
 import pandas as pd
-import gdown
+#import gdown
 import os
 
 def load_games_list(path: str) -> pd.DataFrame:
@@ -15,7 +15,7 @@ def download_from_gdrive(file_id: str, local_path: str = "data.csv") -> str:
     return local_path
 
 
-def load_csv(file_id: str, local_path: str = "data.csv", chunksize: int = None):
+#def load_csv(file_id: str, local_path: str = "data.csv", chunksize: int = None):
     """
     Load CSV from Google Drive.
     
@@ -27,9 +27,9 @@ def load_csv(file_id: str, local_path: str = "data.csv", chunksize: int = None):
     Returns:
         pd.DataFrame or Iterator[pd.DataFrame]: Dataframe (full load) or chunks iterator.
     """
-    file_path = download_from_gdrive(file_id, local_path)
+    #file_path = download_from_gdrive(file_id, local_path)
 
-    if chunksize:
-        return pd.read_csv(file_path, chunksize=chunksize, low_memory=False)
-    else:
-        return pd.read_csv(file_path)
+    #if chunksize:
+        #return pd.read_csv(file_path, chunksize=chunksize, low_memory=False)
+    #else:
+        #return pd.read_csv(file_path)
