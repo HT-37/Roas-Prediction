@@ -8,7 +8,7 @@ st.set_page_config(page_title="Game Revenue & ROAS Predictor", layout="wide")
 
 # --- Sidebar / User Settings ---
 with st.sidebar:
-    st.header("⚙️ User Settings")
+    st.header(" User Settings")
 
     # Show developer notes
     show_notes = st.checkbox("Show Developer Notes", value=False)
