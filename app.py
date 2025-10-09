@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 #from data_loader import load_games_list, load_csv
 from roas_prediction import roas_prediction_ui
-from revenue_model import revenue_prediction_ui
+#from revenue_model import revenue_prediction_ui
 
 st.set_page_config(page_title="Game Revenue & ROAS Predictor", layout="wide")
 
