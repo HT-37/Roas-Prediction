@@ -19,7 +19,6 @@ with st.sidebar:
 
     # Upload ROAS file
     roas_file = st.file_uploader("Upload ROAS file (CSV)", type=["csv"])
-    rentention_file = st.file_uploader("Upload Retention file (CSV)", type=["csv"])
 
 # --- Main Layout ---
 st.title("🎮 Game Revenue & ROAS Prediction")
