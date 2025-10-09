@@ -25,7 +25,7 @@ with st.sidebar:
 st.title("🎮 Game Revenue & ROAS Prediction")
 
 # Tabs for two main tasks
-tab1, tab2 = st.tabs(["📊 Cohort ROAS Prediction", "💰 Cash Flow Prediction"])
+tab1, tab2 = st.tabs([" Cohort ROAS Prediction", " Cash Flow Prediction"])
 
 with tab1:
     if roas_file is not None:
