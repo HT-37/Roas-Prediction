@@ -28,7 +28,7 @@ tab1, tab2 = st.tabs([" Cohort ROAS Prediction", " Cash Flow Prediction"])
 
 with tab1:
     if roas_file is not None:
-        roas_prediction_ui(roas_file, retention_file)
+        roas_prediction_ui(roas_file)
     else:
         st.warning("Please upload input files to continue.")
 
