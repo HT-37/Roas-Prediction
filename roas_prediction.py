@@ -34,11 +34,10 @@ MODEL_PATHS = {
 }
 
 # === Main UI Function ===
-def roas_prediction_ui(roas_file,retention_file):
+def roas_prediction_ui(roas_file):
     try:
         # Load and preprocess
         df = pd.read_csv(roas_file)
-        df = pd.read_csv(retention_file)
         df = preprocess(df)
         st.write(" Data Preview", df.head())
 
