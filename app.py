@@ -16,11 +16,9 @@ with st.sidebar:
 
 Please make sure your uploaded CSV includes the following columns:
 
-| Category | Required Columns |
-|-----------|------------------|
-| **General Info** | `Media Source`, `Cohort Day`, `Users`, `Average eCPI` |
-| **ROAS Metrics** | `roas - Rate - day 0`, `roas - Rate - day 1`, `roas - Rate - day 2`, `roas - Rate - day 3`, `roas - Rate - day 7`, `roas - Rate - day 15` |
-| **Session Metrics** | `sessions - Unique users - day 1`, `sessions - Unique users - day 2`, `sessions - Unique users - day 3` |
+ `Media Source`, `Cohort Day`, `Users`, `Average eCPI`,
+  `roas - Rate - day 0`, `roas - Rate - day 1`, `roas - Rate - day 2`, `roas - Rate - day 3`, (`roas - Rate - day 7`), (`roas - Rate - day 15`), 
+  `sessions - Unique users - day 1`, `sessions - Unique users - day 2`, `sessions - Unique users - day 3` 
 """)
 
     # Select Game
