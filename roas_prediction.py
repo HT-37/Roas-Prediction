@@ -34,12 +34,13 @@ MODEL_PATHS = {
 }
 
 # === Main UI Function ===
-def roas_prediction_ui(roas_file):
+def roas_prediction_ui(roas_file,retention_file):
     try:
         # Load and preprocess
         df = pd.read_csv(roas_file)
+        df = pd.read_csv(retention_file)
         df = preprocess(df)
-        st.write("📋 Data Preview", df.head())
+        st.write(" Data Preview", df.head())
 
         # Load all models at once
         models = {key: load_model(path) for key, path in MODEL_PATHS.items()}
@@ -52,11 +53,11 @@ def roas_prediction_ui(roas_file):
             return
 
         last_day = max(available_days)
-        st.info(f"📅 Last ROAS day available: **Day {last_day}**")
+        st.info(f" Last ROAS day available: **Day {last_day}**")
 
         # Determine which future ROAS to predict
         prediction_targets = [d for d in roas_days if d > last_day]
-        st.write(f"🔮 Will predict ROAS for days: {prediction_targets}")
+        st.write(f" Will predict ROAS for days: {prediction_targets}")
 
         # Feature columns
         excluded_cols = ['Cohort Day', 'Media Source'] + [f'roas - Rate - day {d}' for d in roas_days if d > last_day]
@@ -110,7 +111,7 @@ def roas_prediction_ui(roas_file):
         # === Download Button ===
         csv = df.to_csv(index=False)
         st.download_button(
-            "⬇️ Download Result CSV",
+            " Download Result CSV",
             csv,
             "roas_predictions.csv",
             "text/csv"
